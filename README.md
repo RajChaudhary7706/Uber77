@@ -199,4 +199,88 @@ Logs out the authenticated user by clearing the auth cookie and saving the token
 
 ---
 
+---
+
+## Captain Routes — Register Endpoint 🚗🔐
+
+**Description:**
+Registers a new captain, validates input (including vehicle data), hashes the password, creates a captain record, and returns a JWT token plus the created captain (password excluded).
+
+**URL:** `POST /captains/register`
+
+**Authentication:** Not required.
+
+---
+
+## Request Body (application/json) ✉️
+
+Provide a JSON body with the following structure:
+
+```json
+{
+  "fullname": { "firstname": "John", "lastname": "Doe" },
+  "email": "john@example.com",
+  "password": "secret123",
+  "vehicle": {
+    "color": "red",
+    "plate": "XYZ123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+**Field rules:**
+
+- `fullname.firstname` — required, string, min length 3
+- `fullname.lastname` — required (recommended), string, min length 3
+- `email` — required, must be a valid email
+- `password` — required, string, minimum length 6
+- `vehicle.color` — required
+- `vehicle.plate` — required
+- `vehicle.capacity` — required, integer, minimum 1
+- `vehicle.vehicleType` — required, one of `car`, `bike`, `auto`
+
+---
+
+## Responses ✅ / Errors ⚠️
+
+- **201 Created**
+  - When registration succeeds.
+  - Response body example:
+
+```json
+{
+  "token": "<jwt>",
+  "captain": {
+    "_id": "...",
+    "fullname": { "firstname": "John", "lastname": "Doe" },
+    "email": "john@example.com",
+    "vehicle": { "color": "red", "plate": "XYZ123", "capacity": 4, "vehicleType": "car" }
+  }
+}
+```
+
+- **400 Bad Request**
+
+  - Input validation failed (returned by `express-validator`).
+
+- **409 Conflict** (recommended behavior)
+
+  - Duplicate email (when an account with the same email already exists). Handle MongoDB error code 11000 to return this status explicitly.
+
+- **500 Internal Server Error**
+  - Unexpected errors.
+
+---
+
+## Notes & Tips 🔧
+
+- The created captain object should omit the password (ensure the Mongoose schema sets `password.select = false` or remove it before responding).
+- The route is mounted at `/captains` in the application, so the full path is `/captains/register`.
+- Validate vehicle fields consistently in both route validators and the Mongoose schema to avoid model validation errors.
+- Keep the JWT secret (`process.env.JWT_SECRET`) secure and consider setting token expiration and refresh strategies for production.
+
+---
+
 File: `backend/README.md` — edit or extend as needed.
