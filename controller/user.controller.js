@@ -2,7 +2,7 @@ const { response } = require('../app');
 const usermodel = require('../models/user.model');
 const userService = require('../services/user.service');
 const { validationResult } = require('express-validator');
-const blackListTokenModel = require('../models/blacklistToken.model');
+// const blackListTokenModel = require('../models/blacklistToken.model');
 
 module.exports.registerUser = async (req, res, next) => {
 
@@ -68,4 +68,3 @@ module.exports.logoutUser = async (req, res) => {
 
     res.status(200).json({ message: 'Logged out successfully' });
 }
-
