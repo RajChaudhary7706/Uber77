@@ -21,6 +21,7 @@ const Home = () => {
     if(panelOpen){
       gsap.to(panelRef.current,{
       height:'70%',
+      padding:24
       // opacity:1
     })
     gsap.to(panelCloseRef.current,{
@@ -30,6 +31,7 @@ const Home = () => {
     else{
       gsap.to(panelRef.current,{
         height:'0%',
+        padding:0
         // opacity:1
     })
     gsap.to(panelCloseRef.current,{
@@ -81,7 +83,7 @@ const Home = () => {
             </form>
           </div>
 
-        <div ref={panelRef} className=' bg-white h-0'>
+        <div ref={panelRef} className='bg-white h-0'>
               <LocationPanel/>
         </div>
       </div>
